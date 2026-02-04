@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Be My Valentine</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(#140016, #0b1020);
+      font-family: "Courier New", monospace;
+      color: white;
+    }
+
+    .heart {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: pink;
+      transform: rotate(45deg);
+      animation: float 10s linear infinite;
+      opacity: 0.6;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: "";
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: pink;
+      border-radius: 50%;
+    }
+
+    .heart::before { top: -6px; left: 0; }
+    .heart::after { left: -6px; top: 0; }
+
+    @keyframes float {
+      from { transform: translateY(100vh) rotate(45deg); }
+      to { transform: translateY(-10vh) rotate(45deg); }
+    }
+
+    .frame {
+      width: 420px;
+      height: 420px;
+      background: #111;
+      border: 6px solid #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+
+    canvas {
+      image-rendering: pixelated;
+      border: 3px solid #333;
+    }
+
+    .question {
+      margin-top: 14px;
+      text-align: center;
+      font-size: 16px;
+    }
+
+    .buttons {
+      margin-top: 12px;
+    }
+
+    button {
+      background: #ff5c8a;
+      border: none;
+      color: white;
+      padding: 8px 18px;
+      margin: 0 8px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 14px;
+    }
+
+    button.no {
+      background: #555;
+    }
+
+    button:hover {
+      opacity: 0.85;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating hearts -->
+  <script>
+    for (let i = 0; i < 25; i++) {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDuration = 6 + Math.random() * 6 + "s";
+      heart.style.opacity = Math.random();
+      document.body.appendChild(heart);
+    }
+  </script>
+
+  <div class="frame">
+    <canvas id="art" width="260" height="260"></canvas>
+
+    <div class="question" id="question">
+      Do you want to be my valentine?
+    </div>
+
+    <div class="buttons" id="buttons">
+      <button onclick="answerYes()">Yes</button>
+      <button class="no" onclick="answerNo()">No</button>
+    </div>
+  </div>
+
+  <!-- Romantic music -->
+  <audio id="music" loop>
+    <source src="romantic.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    const canvas = document.getElementById("art");
+    const ctx = canvas.getContext("2d");
+    const SIZE = 6;
+
+    function pixel(x, y, color) {
+      ctx.fillStyle = color;
+      ctx.fillRect(x * SIZE, y * SIZE, SIZE, SIZE);
+    }
+
+    function drawNightSky() {
+      ctx.fillStyle = "#0b1020";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      for (let i = 0; i < 60; i++) {
+        pixel(
+          Math.floor(Math.random() * 43),
+          Math.floor(Math.random() * 25),
+          "#ffffff"
+        );
+      }
+    }
+
+    function drawCouple() {
+      // sand
+      ctx.fillStyle = "#d8c58a";
+      ctx.fillRect(0, 170, canvas.width, 90);
+
+      // guy
+      pixel(18, 26, "#ffd1a9");
+      pixel(18, 27, "#3a6ea5");
+      pixel(17, 27, "#3a6ea5");
+      pixel(19, 27, "#3a6ea5");
+
+      // girl (dark skin)
+      pixel(22, 26, "#8d5524");
+      pixel(22, 27, "#c04c7a");
+      pixel(21, 27, "#c04c7a");
+      pixel(23, 27, "#c04c7a");
+    }
+
+    function drawScene() {
+      drawNightSky();
+      drawCouple();
+    }
+
+    drawScene();
+
+    function answerYes() {
+      const music = document.getElementById("music");
+      music.volume = 0.6;
+      music.play();
+
+      document.getElementById("question").innerHTML =
+        "💖 I love you Mi Nucita 💖";
+      document.getElementById("buttons").style.display = "none";
+    }
+
+    function answerNo() {
+      alert("🥺 No regrets ✨");
+    }
+  </script>
+
+</body>
+</html>
+
